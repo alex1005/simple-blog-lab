@@ -19,6 +19,9 @@ public class WebSecurityConfig {
 
 
     @Bean
+    @ConditionalOnProperty(
+      name = "features.security.newfilter", 
+      matchIfMissing = true)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Note: spring security requestMatchers updated again
         // https://stackoverflow.com/questions/76809698/spring-security-method-cannot-decide-pattern-is-mvc-or-not-spring-boot-applicati
@@ -49,6 +52,12 @@ public class WebSecurityConfig {
                 );
 
 
+        return http.build();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "features.security.newfilter")
+    public SecurityFilterChain filterChainNew(HttpSecurity http) throws Exception {
         return http.build();
     }
 }
