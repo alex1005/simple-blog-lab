@@ -25,6 +25,8 @@ This is an ENTIRE application for Java Spring Boot using:
 - A **User** account can `CREATE, READ, UPDATE` Posts
 - An **Admin** account can `CREATE, READ, UPDATE, DELETE` Posts
 
+Chemanov Oleksandr
+
 ## LICENSE
 
 MIT License
