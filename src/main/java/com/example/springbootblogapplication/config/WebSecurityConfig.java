@@ -21,7 +21,8 @@ public class WebSecurityConfig {
 
     @Bean
     @ConditionalOnProperty(
-      name = "features.security.newfilter", 
+      name = "features.security.newfilter",
+      havingValue = "false",
       matchIfMissing = true)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Note: spring security requestMatchers updated again
@@ -57,7 +58,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "features.security.newfilter")
+    @ConditionalOnProperty(name = "features.security.newfilter", havingValue = "true")
     public SecurityFilterChain filterChainNew(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
