@@ -19,6 +19,9 @@ public class WebSecurityConfig {
 
 
     @Bean
+    @ConditionalOnProperty(
+      name = "features.security.newfilter", 
+      matchIfMissing = true)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Note: spring security requestMatchers updated again
         // https://stackoverflow.com/questions/76809698/spring-security-method-cannot-decide-pattern-is-mvc-or-not-spring-boot-applicati
@@ -48,6 +51,38 @@ public class WebSecurityConfig {
                     .permitAll()
                 );
 
+
+        return http.build();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "features.security.newfilter")
+    public SecurityFilterChain filterChainNew(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> {
+                        auth.requestMatchers(antMatcher("/css/**")).permitAll();
+                        auth.requestMatchers(antMatcher("/js/**")).permitAll();
+                        auth.requestMatchers(antMatcher("/images/**")).permitAll();
+                        auth.requestMatchers(antMatcher("/fonts/**")).permitAll();
+                        auth.requestMatchers(antMatcher("/webjars/**")).permitAll();
+                        auth.requestMatchers(antMatcher("/")).permitAll();
+                        auth.requestMatchers(antMatcher("/rss/**")).permitAll();
+                        auth.requestMatchers(antMatcher("/register/**")).permitAll();
+                        auth.requestMatchers(antMatcher("/posts/**")).permitAll();
+                        //auth.requestMatchers(PathRequest.toH2Console()).permitAll();
+                        auth.anyRequest().authenticated();
+                })
+
+                .formLogin(form -> form
+                    .loginPage("/login")
+                    .loginProcessingUrl("/login")
+                    .usernameParameter("email")
+                    .passwordParameter("password")
+                    .defaultSuccessUrl("/")
+                    .failureUrl("/login?error")
+                    .permitAll()
+                );
 
         return http.build();
     }
